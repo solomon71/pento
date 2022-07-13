@@ -26,13 +26,14 @@ defmodule PentoWeb.WrongLive do
   end
 
   def handle_event("guess", %{"number" => guess} = _data, socket) do
+
     msg =
-      # {score, text_msg, style, win}
+      # {score, text_msg, style, win, total wins}
       case String.to_integer(guess) == socket.assigns.select do
         true ->
-          {1, "is Right, congrats!", "text-3xl", true}
+          {1, "is Right, congrats!", "text-3xl", true, socket.assigns.wins + 1}
         _ ->
-          {-0.5, "Wrong. Guess again.", "text-3xl", false}
+          {-0.5, "Wrong. Guess again.", "text-3xl", false, socket.assigns.wins}
       end
     score = socket.assigns.score + elem(msg, 0)
     message = "Your guess: #{guess}"
@@ -46,7 +47,8 @@ defmodule PentoWeb.WrongLive do
         score: score,
         time: time(),
         win_class: elem(msg, 2),
-        win: elem(msg, 3)
+        win: elem(msg, 3),
+        wins: elem(msg, 4)
       )
     }
   end
