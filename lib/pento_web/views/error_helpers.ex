@@ -11,7 +11,7 @@ defmodule PentoWeb.ErrorHelpers do
   def error_tag(form, field) do
     Enum.map(Keyword.get_values(form.errors, field), fn error ->
       content_tag(:span, translate_error(error),
-        class: "invalid-feedback",
+        class: "flex items-center font-medium text-red-500 text-xs mt-1 ml-1",
         phx_feedback_for: input_name(form, field)
       )
     end)

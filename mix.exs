@@ -52,6 +52,7 @@ defmodule Pento.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:tailwind, "~> 0.1.6", runtime: Mix.env() == :dev},
       {:timex, "~> 3.0"},
+      {:faker, "~> 0.17", only: [:test, :dev]}
     ]
   end
 

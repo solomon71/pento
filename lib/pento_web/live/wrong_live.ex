@@ -1,20 +1,21 @@
 defmodule PentoWeb.WrongLive do
   use Phoenix.LiveView, layout: {PentoWeb.LayoutView, "live.html"}
-  alias Pento.Accounts
+  # alias Pento.Accounts
 
   def mount(_params, session, socket) do
-    user =
-    {:ok, assign(
-      socket,
-      score: 0,
-      wins: 0,
-      select: :rand.uniform(10),
-      message: "Make a guess! 😜",
-      repl: "",
-      time: time(),
-      win_class: "text-3xl",
-      win: false
-    )}
+    {:ok,
+     assign(
+       socket,
+       score: 0,
+       wins: 0,
+       select: :rand.uniform(10),
+       message: "Make a guess! 😜",
+       repl: "",
+       time: time(),
+       win_class: "text-3xl",
+       win: false,
+       session_id: session["live_socket_id"]
+     )}
   end
 
   def render(assigns) do
@@ -26,21 +27,23 @@ defmodule PentoWeb.WrongLive do
   end
 
   def handle_event("guess", %{"number" => guess} = _data, socket) do
-
+    # {score, text_msg, style, win, total wins}
     msg =
-      # {score, text_msg, style, win, total wins}
       case String.to_integer(guess) == socket.assigns.select do
         true ->
           {1, "is Right, congrats!", "text-3xl", true, socket.assigns.wins + 1}
+
         _ ->
           {-0.5, "Wrong. Guess again.", "text-3xl", false, socket.assigns.wins}
       end
+
     score = socket.assigns.score + elem(msg, 0)
     message = "Your guess: #{guess}"
-    repl =  "<span class=\"text-lg font-baloo-400\">#{elem(msg, 1)}</span>"
+    repl = "<span class=\"text-lg font-baloo-400\">#{elem(msg, 1)}</span>"
 
     {
-      :noreply, assign(
+      :noreply,
+      assign(
         socket,
         message: message,
         repl: repl,
@@ -55,10 +58,11 @@ defmodule PentoWeb.WrongLive do
 
   def handle_params(params, _uri, socket) do
     case params["win"] do
-
-      "true" -> # win is a true
+      # win is a true
+      "true" ->
         {
-          :noreply, assign(
+          :noreply,
+          assign(
             socket,
             select: :rand.uniform(10),
             message: "Make a guess! 😜",
@@ -68,8 +72,9 @@ defmodule PentoWeb.WrongLive do
             win: false
           )
         }
-      _ -> {:noreply, socket}
 
+      _ ->
+        {:noreply, socket}
     end
   end
 end

@@ -21,6 +21,11 @@
     </h3>
 
     <p><%= raw @repl %></p>
+    <pre>
+        <%= @current_user.email %>
+        <%= @current_user.username %>
+        <%= @session_id %>
+    </pre>
     
     <%= if @win do %>
     <h3 class="py-4">
